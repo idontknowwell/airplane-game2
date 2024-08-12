@@ -1,27 +1,83 @@
-# Query: 
-# ContextLines: 1
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Airplane Game</title>
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Airplane Game</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        #gameArea {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: lightblue;
+            overflow: hidden;
+        }
+        #player {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: blue;
+            bottom: 10px;
+        }
+        .enemy {
+            position: absolute;
+            background-color: red;
+        }
+        .missile {
+            position: absolute;
+            width: 5px;
+            height: 15px;
+            background-color: yellow;
+        }
+        #lives {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+        }
+        #score {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+        }
+        #fireworks {
+            position: absolute;
+            pointer-events: none;
+        }
+        .firework {
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-image: url('fireworks.png'); /* 여기에 폭죽 이미지 추가 */
+            background-size: contain;
+            background-repeat: no-repeat;
+            animation: explode 0.8s forwards;
+        }
+        @keyframes explode {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(1); opacity: 0; }
+        }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div id="gameArea">
-    <div id="player"></div>
-  </div>
-  <script src="script.js"></script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/service-worker.js')
-        .then(function() {
-          console.log('Service Worker Registered');
-        });
-    }
-  </script>
+    <div id="gameArea">
+        <div id="player"></div>
+        <div id="gameOver"></div>
+        <div id="lives"></div>
+        <div id="score"></div>
+        <div id="fireworks"></div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
