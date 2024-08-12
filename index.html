@@ -7,16 +7,12 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* 여기에 CSS 스타일 추가 */
         #gameArea {
             position: relative;
             width: 100vw; /* 전체 너비 */
             height: 100vh; /* 전체 높이 */
             background-color: lightblue; /* 배경색 */
             overflow: hidden; /* 게임 영역을 넘는 요소 숨김 */
-            display: flex; /* 플렉스박스 사용 */
-            justify-content: center; /* 수평 중앙 정렬 */
-            align-items: flex-end; /* 수직 하단 정렬 */
         }
         #player {
             position: absolute;
@@ -26,12 +22,46 @@
             bottom: 10px; /* 화면 하단에서 10px 위치 */
             left: calc(50% - 25px); /* 화면 중앙에 위치 */
         }
+        .enemy {
+            position: absolute;
+            background-color: red;
+            width: 50px; /* 적 비행기 너비 */
+            height: 50px; /* 적 비행기 높이 */
+        }
+        .missile {
+            position: absolute;
+            width: 5px; /* 미사일 너비 */
+            height: 15px; /* 미사일 높이 */
+            background-color: yellow; /* 미사일 색상 */
+        }
+        #lives, #score {
+            position: absolute;
+            top: 10px;
+            font-size: 24px;
+            color: black;
+        }
+        #lives {
+            left: 10px; /* 왼쪽 */
+        }
+        #score {
+            right: 10px; /* 오른쪽 */
+        }
+        #gameOver {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 48px;
+            display: none; /* 게임 오버 메시지 숨김 */
+        }
     </style>
 </head>
 <body>
     <div id="gameArea">
         <div id="player"></div>
-        <!-- 다른 요소들 -->
+        <div id="gameOver">GAME OVER</div>
+        <div id="lives">Lives: 5</div>
+        <div id="score">Score: 0</div>
     </div>
     <script src="script.js"></script>
 </body>
