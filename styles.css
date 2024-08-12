@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #000;
+}
+
+#gameArea {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+#player {
+    width: 50px;
+    height: 50px;
+    background-color: #ff0;
+    position: absolute;
+    bottom: 10px;
+    left: calc(50% - 25px);
+}
+
+.enemy {
+    background-color: red; /* 적 비행기의 색상 */
+    position: absolute;
+    width: 50px; /* 적 비행기 너비 */
+    height: 50px; /* 적 비행기 높이 */
+}
+
+.missile {
+    background-color: yellow; /* 미사일 색상 */
+    position: absolute;
+    width: 5px; /* 미사일 너비 */
+    height: 20px; /* 미사일 높이 */
+}
+
+.heart {
+    font-size: 30px; /* 하트 크기 조정 */
+    color: red; /* 하트 색상 */
+}
+
+.firework {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 0, 0, 0) 70%);
+    opacity: 1;
+    pointer-events: none;
+    animation: explode 0.8s forwards;
+}
+
+@keyframes explode {
+    0% { transform: scale(1); }
+    100% { transform: scale(4); opacity: 0; }
+}
