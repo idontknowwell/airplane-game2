@@ -7,76 +7,31 @@
     <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* 여기에 CSS 스타일 추가 */
         #gameArea {
             position: relative;
-            width: 100vw;
-            height: 100vh;
-            background-color: lightblue;
-            overflow: hidden;
+            width: 100vw; /* 전체 너비 */
+            height: 100vh; /* 전체 높이 */
+            background-color: lightblue; /* 배경색 */
+            overflow: hidden; /* 게임 영역을 넘는 요소 숨김 */
+            display: flex; /* 플렉스박스 사용 */
+            justify-content: center; /* 수평 중앙 정렬 */
+            align-items: flex-end; /* 수직 하단 정렬 */
         }
         #player {
             position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: blue;
-            bottom: 10px;
-        }
-        .enemy {
-            position: absolute;
-            background-color: red;
-        }
-        .missile {
-            position: absolute;
-            width: 5px;
-            height: 15px;
-            background-color: yellow;
-        }
-        #lives {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            font-size: 24px;
-        }
-        #score {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 24px;
-        }
-        #fireworks {
-            position: absolute;
-            pointer-events: none;
-        }
-        .firework {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            background-image: url('fireworks.png'); /* 여기에 폭죽 이미지 추가 */
-            background-size: contain;
-            background-repeat: no-repeat;
-            animation: explode 0.8s forwards;
-        }
-        @keyframes explode {
-            0% { transform: scale(0); opacity: 1; }
-            100% { transform: scale(1); opacity: 0; }
-        }
-        #gameOver {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            display: none;
+            width: 50px;  /* 비행기 너비 */
+            height: 50px; /* 비행기 높이 */
+            background-color: blue; /* 비행기 색상 */
+            bottom: 10px; /* 화면 하단에서 10px 위치 */
+            left: calc(50% - 25px); /* 화면 중앙에 위치 */
         }
     </style>
 </head>
 <body>
     <div id="gameArea">
         <div id="player"></div>
-        <div id="gameOver"></div>
-        <div id="lives"></div>
-        <div id="score"></div>
-        <div id="fireworks"></div>
+        <!-- 다른 요소들 -->
     </div>
     <script src="script.js"></script>
 </body>
