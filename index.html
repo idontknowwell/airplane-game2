@@ -4,35 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airplane Game</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="stylesheet" href="styles.css">
     <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
+            background-color: lightblue;
+            font-family: Arial, sans-serif;
+        }
         #gameArea {
             position: relative;
-            width: 100vw; /* 전체 너비 */
-            height: 100vh; /* 전체 높이 */
-            background-color: lightblue; /* 배경색 */
-            overflow: hidden; /* 게임 영역을 넘는 요소 숨김 */
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            background-color: lightblue;
         }
         #player {
             position: absolute;
-            width: 50px;  /* 비행기 너비 */
-            height: 50px; /* 비행기 높이 */
-            background-color: blue; /* 비행기 색상 */
-            bottom: 10px; /* 화면 하단에서 10px 위치 */
-            left: calc(50% - 25px); /* 화면 중앙에 위치 */
+            width: 50px;
+            height: 50px;
+            background-color: blue;
+            bottom: 50px;
+            left: calc(50% - 25px);
         }
         .enemy {
             position: absolute;
+            width: 50px;
+            height: 50px;
             background-color: red;
-            width: 50px; /* 적 비행기 너비 */
-            height: 50px; /* 적 비행기 높이 */
+            top: 0;
         }
         .missile {
             position: absolute;
-            width: 5px; /* 미사일 너비 */
-            height: 15px; /* 미사일 높이 */
-            background-color: yellow; /* 미사일 색상 */
+            width: 5px;
+            height: 20px;
+            background-color: yellow;
         }
         #lives, #score {
             position: absolute;
@@ -41,26 +48,27 @@
             color: black;
         }
         #lives {
-            left: 10px; /* 왼쪽 */
+            left: 10px;
         }
         #score {
-            right: 10px; /* 오른쪽 */
+            right: 10px;
         }
-        #gameOver {
+        #gameOver, #victory {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
             font-size: 48px;
-            display: none; /* 게임 오버 메시지 숨김 */
+            display: none;
         }
     </style>
 </head>
 <body>
     <div id="gameArea">
         <div id="player"></div>
-        <div id="gameOver">GAME OVER</div>
-        <div id="lives">Lives: 5</div>
+        <div id="gameOver">The End</div>
+        <div id="victory">Victory!</div>
+        <div id="lives"></div>
         <div id="score">Score: 0</div>
     </div>
     <script src="script.js"></script>
