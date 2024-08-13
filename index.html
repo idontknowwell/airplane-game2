@@ -4,73 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Airplane Game</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100%;
-            background-color: lightblue;
-            font-family: Arial, sans-serif;
-        }
-        #gameArea {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            overflow: hidden;
-            background-color: lightblue;
-        }
-        #player {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: blue;
-            bottom: 50px;
-            left: calc(50% - 25px);
-        }
-        .enemy {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            background-color: red;
-            top: 0;
-        }
-        .missile {
-            position: absolute;
-            width: 5px;
-            height: 20px;
-            background-color: yellow;
-        }
-        #lives, #score {
-            position: absolute;
-            top: 10px;
-            font-size: 24px;
-            color: black;
-        }
-        #lives {
-            left: 10px;
-        }
-        #score {
-            right: 10px;
-        }
-        #gameOver, #victory {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 48px;
-            display: none;
-        }
-    </style>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="gameArea">
         <div id="player"></div>
-        <div id="gameOver">The End</div>
-        <div id="victory">Victory!</div>
-        <div id="lives"></div>
-        <div id="score">Score: 0</div>
     </div>
+    <div id="lives" style="position: absolute; top: 10px; left: 10px; font-size: 30px; color: red;"></div>
+    <div id="gameOver" style="display: none; color: white; font-size: 50px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">THE END</div>
     <script src="script.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then(function() {
+                    console.log('Service Worker Registered');
+                });
+        }
+    </script>
 </body>
 </html>
