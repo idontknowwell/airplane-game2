@@ -1,42 +1,71 @@
-let player = document.getElementById('player');
-let gameArea = document.getElementById('gameArea');
-let gameOverText = document.getElementById('gameOver');
-let livesText = document.getElementById('lives');
-let scoreText = document.getElementById('score');
-let playerPosition = gameArea.clientWidth / 2 - 25; // 초기 위치
-let lives = 5; // 비행기 목숨
-let score = 0; // 점수
+const player = document.getElementById('player');
+const gameArea = document.getElementById('gameArea');
+const livesDisplay = document.getElementById('lives');
+const scoreDisplay = document.getElementById('score');
+const gameOverText = document.getElementById('gameOver');
+const victoryText = document.getElementById('victory');
+
+let playerPosition = { x: gameArea.clientWidth / 2 - 25, y: gameArea.clientHeight - 100 };
+let lives = 5;
+let score = 0;
 let enemies = [];
 let missiles = [];
-let gameInterval;
+let enemyFollowDelay = 1000; // 적 비행기가 내 비행기를 쫓아오는 지연 시간 (ms)
 let enemyInterval;
+let gameInterval;
+let isGameOver = false;
 
-// 비행기 위치 업데이트 함수
+// 비행기 위치 업데이트
 function updatePlayerPosition() {
-    player.style.left = `${playerPosition}px`;
+    player.style.left = `${playerPosition.x}px`;
+    player.style.top = `${playerPosition.y}px`;
 }
 
-// 적 비행기 생성 함수
+// 하트 모양으로 목숨 표시
+function updateLivesDisplay() {
+    livesDisplay.innerHTML = '❤️'.repeat(lives);
+}
+
+// 점수 업데이트
+function updateScoreDisplay() {
+    scoreDisplay.innerText = `Score: ${score}`;
+}
+
+// 적 비행기 생성
 function createEnemy() {
     const enemy = document.createElement('div');
     enemy.classList.add('enemy');
     enemy.style.left = `${Math.random() * (gameArea.clientWidth - 50)}px`;
-    enemy.style.top = '0px';
     gameArea.appendChild(enemy);
     enemies.push(enemy);
+    setTimeout(() => followPlayer(enemy), enemyFollowDelay);
 }
 
-// 미사일 발사 함수
+// 적 비행기가 내 비행기를 쫓아오게
+function followPlayer(enemy) {
+    if (isGameOver) return;
+    const followInterval = setInterval(() => {
+        const enemyX = parseInt(enemy.style.left);
+        if (enemyX < playerPosition.x) {
+            enemy.style.left = `${enemyX + 5}px`;
+        } else if (enemyX > playerPosition.x) {
+            enemy.style.left = `${enemyX - 5}px`;
+        }
+    }, 50);
+    enemy.followInterval = followInterval;
+}
+
+// 미사일 발사
 function shootMissile() {
     const missile = document.createElement('div');
     missile.classList.add('missile');
-    missile.style.left = `${playerPosition + 22}px`; // 비행기 중앙에서 발사
-    missile.style.bottom = '50px'; // 비행기 위에서 발사
+    missile.style.left = `${playerPosition.x + 22.5}px`;
+    missile.style.top = `${playerPosition.y}px`;
     gameArea.appendChild(missile);
     missiles.push(missile);
 }
 
-// 충돌 체크 함수
+// 충돌 감지
 function checkCollision() {
     for (let i = 0; i < enemies.length; i++) {
         const enemy = enemies[i];
@@ -50,11 +79,12 @@ function checkCollision() {
             playerRect.top < enemyRect.bottom &&
             playerRect.bottom > enemyRect.top
         ) {
-            lives -= 1; // 목숨 감소
-            livesText.innerText = `Lives: ${lives}`;
-            gameArea.removeChild(enemy); // 적 비행기 제거
-            enemies.splice(i, 1); // 배열에서 적 비행기 제거
-            i--; // 인덱스 조정
+            lives--;
+            updateLivesDisplay();
+            gameArea.removeChild(enemy);
+            enemies.splice(i, 1);
+            clearInterval(enemy.followInterval);
+            i--;
             if (lives <= 0) {
                 endGame();
             }
@@ -76,50 +106,96 @@ function checkCollision() {
                 missileRect.top < enemyRect.bottom &&
                 missileRect.bottom > enemyRect.top
             ) {
-                score += 10; // 점수 증가
-                scoreText.innerText = `Score: ${score}`;
-                gameArea.removeChild(enemy); // 적 비행기 제거
-                gameArea.removeChild(missile); // 미사일 제거
-                enemies.splice(j, 1); // 배열에서 적 비행기 제거
-                missiles.splice(i, 1); // 배열에서 미사일 제거
-                i--; // 인덱스 조정
-                break; // 한 번의 미사일에 대해 여러 적 비행기를 처리하지 않도록
+                score++;
+                updateScoreDisplay();
+                gameArea.removeChild(enemy);
+                gameArea.removeChild(missile);
+                enemies.splice(j, 1);
+                missiles.splice(i, 1);
+                i--;
+                if (score >= 10) {
+                    victory();
+                }
+                break;
             }
         }
     }
 }
 
-// 게임 종료 함수
+// 게임 종료
 function endGame() {
+    isGameOver = true;
     clearInterval(gameInterval);
     clearInterval(enemyInterval);
-    gameOverText.style.display = 'block'; // 게임 오버 메시지 표시
+    gameOverText.style.display = 'block';
+}
+
+// 승리 시 처리
+function victory() {
+    isGameOver = true;
+    clearInterval(gameInterval);
+    clearInterval(enemyInterval);
+    victoryText.style.display = 'block';
 }
 
 // 게임 루프
 function gameLoop() {
-    // 적 비행기 위치 업데이트
-    for (let enemy of enemies) {
-        enemy.style.top = `${parseInt(enemy.style.top) + 2}px`; // 아래로 이동
-        if (parseInt(enemy.style.top) > gameArea.clientHeight) {
-            endGame(); // 화면 아래로 내려가면 게임 종료
+    // 미사일 이동 및 화면 밖으로 나간 미사일 제거
+    for (let i = 0; i < missiles.length; i++) {
+        const missile = missiles[i];
+        missile.style.top = `${parseInt(missile.style.top) - 5}px`;
+        if (parseInt(missile.style.top) < 0) {
+            gameArea.removeChild(missile);
+            missiles.splice(i, 1);
+            i--;
         }
     }
-    checkCollision(); // 충돌 체크
+
+    // 적 비행기 이동 및 화면 아래로 내려간 적 비행기 제거
+    for (let i = 0; i < enemies.length; i++) {
+        const enemy = enemies[i];
+        enemy.style.top = `${parseInt(enemy.style.top) + 2}px`;
+        if (parseInt(enemy.style.top) > gameArea.clientHeight) {
+            gameArea.removeChild(enemy);
+            enemies.splice(i, 1);
+            i--;
+        }
+    }
+
+    checkCollision();
 }
 
 // 키 입력 처리
 document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowLeft' && playerPosition > 0) {
-        playerPosition -= 10; // 왼쪽으로 이동
-    } else if (event.key === 'ArrowRight' && playerPosition < gameArea.clientWidth - player.clientWidth) {
-        playerPosition += 10; // 오른쪽으로 이동
-    } else if (event.key === ' ') {
-        shootMissile(); // 스페이스바로 미사일 발사
+    if (isGameOver) return;
+
+    switch (event.key) {
+        case 'ArrowLeft':
+            if (playerPosition.x > 0) playerPosition.x -= 10;
+            break;
+        case 'ArrowRight':
+            if (playerPosition.x < gameArea.clientWidth - player.clientWidth) playerPosition.x += 10;
+            break;
+        case 'ArrowUp':
+            if (playerPosition.y > 0) playerPosition.y -= 10;
+            break;
+        case 'ArrowDown':
+            if (playerPosition.y < gameArea.clientHeight - player.clientHeight) playerPosition.y += 10;
+            break;
+        case ' ':
+            shootMissile();
+            break;
     }
-    updatePlayerPosition(); // 비행기 위치 업데이트
+    updatePlayerPosition();
 });
 
 // 게임 시작
-enemyInterval = setInterval(createEnemy, 2000); // 2초마다 적 비행기 생성
-gameInterval = setInterval(gameLoop, 100); // 100ms마다 게임 루프 실행
+function startGame() {
+    updatePlayerPosition();
+    updateLivesDisplay();
+    updateScoreDisplay();
+    enemyInterval = setInterval(createEnemy, 2000); // 2초마다 적 비행기 생성
+    gameInterval = setInterval(gameLoop, 20); // 20ms마다 게임 루프 실행
+}
+
+startGame();
