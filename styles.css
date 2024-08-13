@@ -5,16 +5,10 @@ body {
 }
 
 #gameArea {
+    width: 100vw;
+    height: 100vh;
     position: relative;
-    width: 100vw; /* 전체 너비 */
-    height: 100vh; /* 전체 높이 */
-    background-color: lightblue; /* 배경색 */
-    overflow: hidden; /* 게임 영역을 넘는 요소 숨김 */
-    display: flex; /* 플렉스박스 사용 */
-    justify-content: center; /* 수평 중앙 정렬 */
-    align-items: flex-end; /* 수직 하단 정렬 */
 }
-
 
 #player {
     width: 50px;
@@ -42,19 +36,4 @@ body {
 .heart {
     font-size: 30px; /* 하트 크기 조정 */
     color: red; /* 하트 색상 */
-}
-
-.firework {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 0, 0, 0) 70%);
-    opacity: 1;
-    pointer-events: none;
-    animation: explode 0.8s forwards;
-}
-
-@keyframes explode {
-    0% { transform: scale(1); }
-    100% { transform: scale(4); opacity: 0; }
 }
